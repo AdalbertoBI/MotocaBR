@@ -360,6 +360,56 @@ class AnalisadorCorrida {
             localStorage.setItem('minLucroMin', novosMinimos.minLucroMin);
         }
     }
+
+    obterConfiguracao() {
+        // Retorna a configuração atual dos critérios mínimos
+        return {
+            lucroMinimoPorKm: this.config.minLucroKm,
+            lucroMinimoPorHora: this.config.minLucroHora,
+            lucroMinimoPorMinuto: this.config.minLucroMin,
+            kmPorLitro: this.config.kmPorLitro,
+            precoPorLitro: this.config.precoPorLitro
+        };
+    }
+
+    obterEstatisticasPorData(dataStr) {
+        // Retorna estatísticas de um dia específico
+        try {
+            const stats = JSON.parse(localStorage.getItem('estatisticasAnalises') || '{}');
+            const dataKey = new Date(dataStr).toDateString();
+            
+            if (!stats[dataKey]) {
+                return {
+                    total: 0,
+                    aceitas: 0,
+                    recusadas: 0,
+                    lucroTotal: 0,
+                    kmTotal: 0,
+                    tempoTotal: 0
+                };
+            }
+            
+            const s = stats[dataKey];
+            return {
+                total: s.total,
+                aceitas: s.aceitas || 0,
+                recusadas: s.recusadas || 0,
+                lucroTotal: s.somaLucro || 0,
+                kmTotal: s.somaDistancia || 0,
+                tempoTotal: s.somaTempo || 0
+            };
+        } catch (e) {
+            console.error('[AnalisadorCorrida] Erro ao obter estatísticas por data:', e);
+            return {
+                total: 0,
+                aceitas: 0,
+                recusadas: 0,
+                lucroTotal: 0,
+                kmTotal: 0,
+                tempoTotal: 0
+            };
+        }
+    }
 }
 
 // Instância global
