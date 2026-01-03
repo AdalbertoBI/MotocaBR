@@ -1,0 +1,55 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Instalar Bubblewrap CLI
+      run: |
+        npm install -g @bubblewrap/cli
+    
+    - name: Inicializar projeto TWA
+      run: |
+        bubblewrap init --manifest https://adalbertobi.github.io/MotocaBR/manifest.json
+    
+    - name: Build APK
+      run: |
+        bubblewrap build
+    
+    - name: Upload APK como artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: motocabr-apk
+        path: app-release-signed.apk
+    
+    - name: Criar Release no GitHub
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: app-release-signed.apk
+        name: Motoca BR ${{ github.ref_name }}
+        body: |
+          ## 📱 Download do APK
+          
+          Baixe o arquivo `app-release-signed.apk` abaixo e instale no seu Android.
+          
+          ### 🆕 Novidades desta versão
+          Veja o changelog completo no [README](https://github.com/AdalbertoBI/MotocaBR)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
