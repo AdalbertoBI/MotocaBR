@@ -1,6 +1,7 @@
 {
     "name": "Motoca BR",
     "short_name": "Motoca BR",
+    "description": "Aplicativo completo para entregadores: cálculo de rotas, frete, controle financeiro e análise de corridas em tempo real.",
     "start_url": "/MotocaBR/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -27,7 +28,46 @@
             "type": "image/png"
         }
     ],
+    "shortcuts": [
+        {
+            "name": "Analisar Corrida",
+            "short_name": "Análise",
+            "description": "Analisar se uma corrida vale a pena",
+            "url": "/MotocaBR/#Analise",
+            "icons": [
+                {
+                    "src": "img/icon-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Calcular Rota",
+            "short_name": "Rotas",
+            "description": "Calcular distância e rota entre pontos",
+            "url": "/MotocaBR/#Rotas",
+            "icons": [
+                {
+                    "src": "img/icon-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Controle Financeiro",
+            "short_name": "Financeiro",
+            "description": "Registrar ganhos e despesas",
+            "url": "/MotocaBR/#Financeiro",
+            "icons": [
+                {
+                    "src": "img/icon-96x96.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
     "orientation": "portrait",
     "scope": "/MotocaBR/",
-    "prefer_related_applications": false
+    "prefer_related_applications": false,
+    "categories": ["productivity", "business", "utilities"]
 }

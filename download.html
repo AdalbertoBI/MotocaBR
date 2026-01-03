@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Baixe o Motoca BR - Aplicativo completo para entregadores com análise de corridas, cálculo de rotas e controle financeiro.">
+    <title>Baixar Motoca BR - App para Entregadores</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+        
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 30px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .download-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .download-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-web {
+            background: #007bff;
+            color: white;
+        }
+        
+        .features {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .features h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .feature-card {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .install-guide {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .install-guide h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .install-steps {
+            counter-reset: step-counter;
+        }
+        
+        .install-step {
+            counter-increment: step-counter;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            position: relative;
+            padding-left: 60px;
+        }
+        
+        .install-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: white;
+            opacity: 0.9;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                font-size: 1rem;
+                padding: 15px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <div class="app-icon">🏍️</div>
+            <h1>Motoca BR</h1>
+            <p>O app completo para entregadores profissionais</p>
+        </div>
+        
+        <div class="download-section">
+            <h2 style="text-align: center; margin-bottom: 20px;">📥 Baixar Aplicativo</h2>
+            
+            <div class="alert">
+                <span class="alert-icon">⚠️</span>
+                <strong>APK em desenvolvimento!</strong> Por enquanto, use a versão web clicando no botão abaixo.
+            </div>
+            
+            <div class="download-buttons">
+                <a href="./index.html" class="btn btn-web">
+                    🌐 Abrir Versão Web
+                </a>
+                
+                <a href="#" class="btn btn-primary" id="btnDownloadAPK" style="opacity: 0.6; cursor: not-allowed;">
+                    📱 Baixar APK (Em breve)
+                </a>
+                
+                <a href="https://github.com/adalbertobi/MotocaBR" class="btn btn-secondary" target="_blank" rel="noopener">
+                    💻 Ver no GitHub
+                </a>
+            </div>
+        </div>
+        
+        <div class="features">
+            <h2>✨ Recursos Principais</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚦</div>
+                    <h3>Análise de Corridas</h3>
+                    <p>Sistema semáforo mostra se a corrida vale a pena em segundos. Calcule R$/Km, R$/Hora e R$/Min.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Cálculo de Rotas</h3>
+                    <p>Calcule distância, tempo e custo de combustível entre múltiplos pontos.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Controle Financeiro</h3>
+                    <p>Registre ganhos e despesas. Visualize relatórios por semana e aplicativo.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Estatísticas</h3>
+                    <p>Acompanhe métricas diárias, semanais e mensais do seu trabalho.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📴</div>
+                    <h3>Funciona Offline</h3>
+                    <p>Todos os recursos disponíveis sem internet após primeira instalação.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌙</div>
+                    <h3>Modo Escuro</h3>
+                    <p>Interface adaptável para uso noturno com tema escuro automático.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="install-guide">
+            <h2>📱 Como Instalar (quando disponível)</h2>
+            
+            <div class="install-steps">
+                <div class="install-step">
+                    <strong>Clique em "Baixar APK"</strong><br>
+                    O arquivo motocabr.apk será baixado para seu dispositivo Android.
+                </div>
+                
+                <div class="install-step">
+                    <strong>Abra o arquivo baixado</strong><br>
+                    Toque na notificação de download ou abra pelo gerenciador de arquivos.
+                </div>
+                
+                <div class="install-step">
+                    <strong>Permita instalação de fontes desconhecidas</strong><br>
+                    Se solicitado, vá em Configurações > Segurança e habilite "Fontes Desconhecidas" ou "Instalar apps de fontes desconhecidas".
+                </div>
+                
+                <div class="install-step">
+                    <strong>Confirme a instalação</strong><br>
+                    Toque em "Instalar" e aguarde a conclusão.
+                </div>
+                
+                <div class="install-step">
+                    <strong>Abra e aproveite!</strong><br>
+                    O Motoca BR estará disponível na sua tela inicial.
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Motoca BR</strong> - Desenvolvido para entregadores, por entregadores</p>
+            <p>
+                <a href="https://chat.whatsapp.com/IbsOuFuyRweCEzLMooCyVD" target="_blank" rel="noopener">💬 Comunidade WhatsApp</a> • 
+                <a href="https://www.instagram.com/betomotoquinha/" target="_blank" rel="noopener">📸 Instagram</a> • 
+                <a href="https://github.com/adalbertobi/MotocaBR" target="_blank" rel="noopener">💻 GitHub</a>
+            </p>
+            <p style="margin-top: 20px; font-size: 0.9rem;">
+                Versão 1.0.0 | © 2024 Motoca BR
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Detectar Android
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        
+        // Desabilitar botão APK se não for Android
+        if (!isAndroid) {
+            const btnAPK = document.getElementById('btnDownloadAPK');
+            btnAPK.style.display = 'none';
+        }
+        
+        // Evento de download (quando estiver disponível)
+        document.getElementById('btnDownloadAPK').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('O APK está em desenvolvimento. Use a versão web por enquanto! 🌐');
+        });
+    </script>
+</body>
+</html>

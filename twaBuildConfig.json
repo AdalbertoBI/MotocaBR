@@ -1,0 +1,53 @@
+{
+  "appName": "Motoca BR",
+  "packageId": "br.motoca.app",
+  "host": "adalbertobi.github.io",
+  "startUrl": "/MotocaBR/",
+  "themeColor": "#007bff",
+  "navigationColor": "#ffffff",
+  "navigationColorDark": "#000000",
+  "backgroundColor": "#ffffff",
+  "enableNotifications": true,
+  "enableSiteSettingsShortcut": true,
+  "orientation": "portrait",
+  "display": "standalone",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "minSdkVersion": 21,
+  "targetSdkVersion": 33,
+  "versionCode": 1,
+  "versionName": "1.0.0",
+  "signing": {
+    "keystore": "motoca-br-release.keystore",
+    "alias": "motocabr",
+    "storePassword": "CHANGE_ME",
+    "keyPassword": "CHANGE_ME"
+  },
+  "shortcuts": [
+    {
+      "name": "Analisar Corrida",
+      "short_name": "Analisar",
+      "url": "/MotocaBR/#analise",
+      "icon": "img/icon-96x96.png"
+    },
+    {
+      "name": "Calcular Rota",
+      "short_name": "Rota",
+      "url": "/MotocaBR/#rotas",
+      "icon": "img/icon-96x96.png"
+    },
+    {
+      "name": "Financeiro",
+      "short_name": "Finanças",
+      "url": "/MotocaBR/#financeiro",
+      "icon": "img/icon-96x96.png"
+    }
+  ]
+}

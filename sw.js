@@ -1,19 +1,23 @@
-const CACHE_NAME = 'motoca-br-v2.3';
-const DATA_BACKUP_CACHE = 'data-backup-v2.3';
+const CACHE_NAME = 'motoca-br-v3.0';
+const DATA_BACKUP_CACHE = 'data-backup-v3.0';
 const FILES_TO_CACHE = [
     '/',
     '/index.html',
-    '/style.css?v=2.3',
+    '/style.css?v=3.0',
+    '/analise-style.css?v=1.0',
     '/mapa.js?v=2.3',
     '/script.js?v=2.3',
     '/frete.js?v=2.3',
     '/financeiro.js?v=2.3',
+    '/analise-corrida.js?v=1.0',
+    '/analise-ui.js?v=1.0',
+    '/install-prompt.js?v=1.0',
     '/manifest.json',
     '/img/icon-192x192.png'
 ];
 
 self.addEventListener('install', (event) => {
-    console.log('[Service Worker] Instalando versão 2.3');
+    console.log('[Service Worker] Instalando versão 3.0');
     event.waitUntil(
         Promise.all([
             caches.open(CACHE_NAME)

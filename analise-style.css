@@ -1,0 +1,504 @@
+/* ===== ESTILOS PARA ABA DE ANÁLISE DE CORRIDA ===== */
+
+/* Estatísticas do Dia */
+.stats-today {
+    background: var(--config-section-bg);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.stats-today h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.stat-card {
+    background: var(--container-bg);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--input-border);
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--btn-primary-bg);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Seleção de App */
+.app-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.app-btn-selector {
+    padding: 15px;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.app-btn-selector .app-emoji {
+    font-size: 2rem;
+}
+
+.app-btn-selector.active {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ifood-btn {
+    background: var(--ifood-red);
+    color: white;
+}
+
+.ifood-btn.active {
+    border-color: #fff;
+}
+
+.uber-btn {
+    background: var(--uber-black);
+    color: white;
+}
+
+.uber-btn.active {
+    border-color: #fff;
+}
+
+.\39 9-btn {
+    background: var(--99-yellow);
+    color: #000;
+}
+
+.\39 9-btn.active {
+    border-color: #000;
+}
+
+.rappi-btn {
+    background: var(--rappi-orange);
+    color: white;
+}
+
+.rappi-btn.active {
+    border-color: #fff;
+}
+
+/* Inputs Grandes */
+.analise-rapida {
+    margin-bottom: 20px;
+}
+
+.big-input-group {
+    margin-bottom: 15px;
+}
+
+.big-input-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.big-input {
+    width: 100%;
+    padding: 18px;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid var(--input-border);
+    border-radius: 10px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
+}
+
+.big-input:focus {
+    outline: none;
+    border-color: var(--btn-primary-bg);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Botão Analisar Gigante */
+.btn-analisar-giant {
+    width: 100%;
+    padding: 25px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-analisar-giant:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn-analisar-giant:active {
+    transform: scale(0.98);
+}
+
+/* Resultado da Análise */
+.resultado-analise {
+    margin-top: 30px;
+    padding: 20px;
+    background: var(--config-section-bg);
+    border-radius: 15px;
+    text-align: center;
+}
+
+/* Semáforo Gigante */
+.semaforo-giant {
+    margin: 20px auto;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.semaforo-luz {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.semaforo-luz.verde {
+    background: var(--semaforo-green);
+    box-shadow: 0 0 50px var(--semaforo-green);
+}
+
+.semaforo-luz.azul {
+    background: var(--semaforo-blue);
+    box-shadow: 0 0 50px var(--semaforo-blue);
+}
+
+.semaforo-luz.amarelo {
+    background: var(--semaforo-yellow);
+    box-shadow: 0 0 50px var(--semaforo-yellow);
+}
+
+.semaforo-luz.vermelho {
+    background: var(--semaforo-red);
+    box-shadow: 0 0 50px var(--semaforo-red);
+}
+
+/* Pontuação */
+.pontuacao-container {
+    margin: 20px 0;
+}
+
+.pontuacao-valor {
+    font-size: 4rem;
+    font-weight: bold;
+    color: var(--btn-primary-bg);
+    line-height: 1;
+}
+
+.pontuacao-label {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Título e Mensagem */
+.result-title {
+    font-size: 1.8rem;
+    margin: 20px 0 10px;
+}
+
+.result-message {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+/* Métricas Principais */
+.metrics-big {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.metric {
+    background: var(--container-bg);
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid var(--input-border);
+}
+
+.metric-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--btn-success-bg);
+    margin-bottom: 5px;
+}
+
+.metric-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Detalhes da Análise */
+.detalhes-analise {
+    background: var(--container-bg);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.detalhes-analise h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.table-detalhes {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-detalhes tr {
+    border-bottom: 1px solid var(--input-border);
+}
+
+.table-detalhes td {
+    padding: 10px 5px;
+}
+
+.table-detalhes td:first-child {
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.table-detalhes td:last-child {
+    text-align: right;
+    font-weight: bold;
+}
+
+.valor-destaque {
+    color: var(--btn-success-bg);
+    font-size: 1.2rem;
+}
+
+/* Botões de Decisão */
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.btn-giant {
+    padding: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-accept {
+    background: var(--btn-success-bg);
+    color: white;
+}
+
+.btn-accept:hover {
+    background: var(--btn-success-hover);
+    transform: translateY(-2px);
+}
+
+.btn-reject {
+    background: var(--btn-danger-bg);
+    color: white;
+}
+
+.btn-reject:hover {
+    background: var(--btn-danger-hover);
+    transform: translateY(-2px);
+}
+
+/* Histórico Rápido */
+.historico-rapido {
+    background: var(--config-section-bg);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.historico-rapido h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+#listaHistoricoRapido {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.historico-item {
+    background: var(--container-bg);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid var(--btn-primary-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.historico-item.aceita {
+    border-left-color: var(--btn-success-bg);
+}
+
+.historico-item.recusada {
+    border-left-color: var(--btn-danger-bg);
+}
+
+.historico-info {
+    flex: 1;
+}
+
+.historico-app {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.historico-valores {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.historico-decisao {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.historico-decisao.aceita {
+    background: var(--btn-success-bg);
+    color: white;
+}
+
+.historico-decisao.recusada {
+    background: var(--btn-danger-bg);
+    color: white;
+}
+
+/* Modal de Configuração */
+.modal-criterios {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-content-criterios {
+    background: var(--container-bg);
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-content-criterios h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-group button {
+    flex: 1;
+}
+
+/* Responsivo - Mobile */
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .metrics-big {
+        grid-template-columns: 1fr;
+    }
+    
+    .big-input {
+        font-size: 28px;
+    }
+    
+    .btn-analisar-giant {
+        font-size: 1.5rem;
+        padding: 20px;
+    }
+    
+    .semaforo-giant {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .semaforo-luz {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .pontuacao-valor {
+        font-size: 3rem;
+    }
+}

@@ -22,6 +22,16 @@
     --error-color: #dc3545;
     --loading-color: #007bff;
     --saved-border: #28a745;
+    
+    /* Novas variáveis para análise de corrida */
+    --ifood-red: #ea1d2c;
+    --uber-black: #000000;
+    --99-yellow: #ffd600;
+    --rappi-orange: #ff441f;
+    --semaforo-green: #2ecc71;
+    --semaforo-blue: #3498db;
+    --semaforo-yellow: #f39c12;
+    --semaforo-red: #e74c3c;
 }
 
 body.dark-mode {
