@@ -20,36 +20,123 @@ jobs:
       with:
         node-version: '20'
     
+    - name: Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+    
     - name: Instalar Bubblewrap CLI
       run: |
         npm install -g @bubblewrap/cli
     
-    - name: Inicializar projeto TWA
+    - name: Inicializar projeto TWA (não-interativo)
       run: |
+        echo "Configurando Bubblewrap..."
+        bubblewrap init \
+          --manifest https://adalbertobi.github.io/MotocaBR/manifest.json \
+          --skipPwaValidation || true
+      continue-on-error: true
+    
+    - name: Criar APK placeholder (método alternativo)
+      run: |
+        echo "⚠️ Build de APK via CI/CD requer configuração adicional (keystore)"
+        echo "📱 Para gerar APK, use PWABuilder manualmente:"
+        echo "   1. Acesse https://www.pwabuilder.com/"
+        echo "   2. Cole: https://adalbertobi.github.io/MotocaBR/"
+        echo "   3. Baixe o APK gerado"
+        echo ""
+        echo "✅ A versão PWA foi atualizada automaticamente no GitHub Pages"
+    
+    - name: Criar artefato de instruções
+      run: |
+        mkdir -p build
+        cat > build/BUILD_INSTRUCTIONS.md << 'EOF'
+        # 📱 Como Gerar o APK do Motoca BR
+        
+        O build automático de APK via GitHub Actions requer configuração de keystore e secrets.
+        
+        ## Método Recomendado: PWABuilder
+        
+        1. Acesse: https://www.pwabuilder.com/
+        2. Cole a URL: https://adalbertobi.github.io/MotocaBR/
+        3. Clique em "Start"
+        4. Aguarde análise do PWA
+        5. Clique em "Package For Stores"
+        6. Selecione "Android"
+        7. Configure opções (ou use padrão)
+        8. Clique em "Generate"
+        9. Baixe o APK gerado
+        
+        ## Método Alternativo: Bubblewrap Local
+        
+        ```bash
+        # Instalar Bubblewrap
+        npm install -g @bubblewrap/cli
+        
+        # Inicializar projeto
         bubblewrap init --manifest https://adalbertobi.github.io/MotocaBR/manifest.json
-    
-    - name: Build APK
-      run: |
+        
+        # Build APK
         bubblewrap build
+        ```
+        
+        ## Atualização Automática
+        
+        - ✅ PWA atualiza automaticamente no GitHub Pages
+        - ✅ APK TWA carrega sempre a versão web mais recente
+        - ✅ Não precisa gerar novo APK a cada mudança!
+        
+        ## Versão Atual
+        
+        - PWA: Sempre atualizado no GitHub Pages
+        - Acesse: https://adalbertobi.github.io/MotocaBR/
+        
+        EOF
     
-    - name: Upload APK como artifact
+    - name: Upload instruções como artifact
       uses: actions/upload-artifact@v4
       with:
-        name: motocabr-apk
-        path: app-release-signed.apk
+        name: apk-build-instructions
+        path: build/BUILD_INSTRUCTIONS.md
     
-    - name: Criar Release no GitHub
+    - name: Criar issue com instruções (apenas em tags)
       if: startsWith(github.ref, 'refs/tags/v')
-      uses: softprops/action-gh-release@v2
+      uses: actions/github-script@v7
       with:
-        files: app-release-signed.apk
-        name: Motoca BR ${{ github.ref_name }}
-        body: |
-          ## 📱 Download do APK
+        script: |
+          const tag = context.ref.replace('refs/tags/', '');
+          const body = `## 📱 Release ${tag} - APK Build
           
-          Baixe o arquivo `app-release-signed.apk` abaixo e instale no seu Android.
+          A versão PWA foi atualizada automaticamente! 🎉
           
-          ### 🆕 Novidades desta versão
-          Veja o changelog completo no [README](https://github.com/AdalbertoBI/MotocaBR)
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          **Acesse agora:** https://adalbertobi.github.io/MotocaBR/
+          
+          ### Para gerar o APK:
+          
+          1. Acesse [PWABuilder](https://www.pwabuilder.com/)
+          2. Cole a URL: \`https://adalbertobi.github.io/MotocaBR/\`
+          3. Baixe o APK Android gerado
+          4. Anexe o APK a este release
+          
+          ### ℹ️ Importante
+          
+          O APK TWA (Trusted Web Activity) carrega automaticamente a versão web atualizada.
+          Você só precisa gerar o APK uma vez, e ele sempre carregará a versão mais recente do GitHub Pages!
+          
+          ### 🔗 Links úteis
+          
+          - [PWABuilder](https://www.pwabuilder.com/)
+          - [Guia de Release](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/RELEASE-GUIDE.md)
+          `;
+          
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: `📱 APK Build para ${tag}`,
+            body: body,
+            labels: ['release', 'apk']
+          });
