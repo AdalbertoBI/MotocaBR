@@ -1,5 +1,6 @@
 // Analisador de Corridas - Motoca BR PRO
 // Funcionalidades equivalentes ao DSW
+// Versão: 1.3
 
 class AnalisadorCorrida {
     constructor() {
@@ -467,7 +468,75 @@ class AnalisadorCorrida {
             return '[]';
         }
     }
+
+    /**
+     * Configura os critérios mínimos de análise
+     * @param {Object} criterios - Objeto com os critérios (minPorKm, minPorHora, minPorMin ou lucroMinimoPorKm, lucroMinimoPorHora, lucroMinimoPorMinuto)
+     */
+    configurar(criterios) {
+        try {
+            // Aceita ambos os formatos de nomenclatura
+            if (criterios.minPorKm !== undefined || criterios.lucroMinimoPorKm !== undefined) {
+                this.minPorKm = Number(criterios.minPorKm || criterios.lucroMinimoPorKm);
+            }
+            if (criterios.minPorHora !== undefined || criterios.lucroMinimoPorHora !== undefined) {
+                this.minPorHora = Number(criterios.minPorHora || criterios.lucroMinimoPorHora);
+            }
+            if (criterios.minPorMin !== undefined || criterios.lucroMinimoPorMinuto !== undefined) {
+                this.minPorMin = Number(criterios.minPorMin || criterios.lucroMinimoPorMinuto);
+            }
+
+            // Salva no localStorage
+            const config = {
+                minPorKm: this.minPorKm,
+                minPorHora: this.minPorHora,
+                minPorMin: this.minPorMin
+            };
+            localStorage.setItem('criterios_analise', JSON.stringify(config));
+            
+            console.log('[AnalisadorCorrida] Critérios configurados:', config);
+            return true;
+        } catch (e) {
+            console.error('[AnalisadorCorrida] Erro ao configurar critérios:', e);
+            return false;
+        }
+    }
+
+    /**
+     * Obtém a configuração atual de critérios
+     * @returns {Object} Objeto com os critérios atuais
+     */
+    obterConfiguracao() {
+        return {
+            lucroMinimoPorKm: this.minPorKm,
+            lucroMinimoPorHora: this.minPorHora,
+            lucroMinimoPorMinuto: this.minPorMin,
+            // Aliases para compatibilidade
+            minPorKm: this.minPorKm,
+            minPorHora: this.minPorHora,
+            minPorMin: this.minPorMin
+        };
+    }
+
+    /**
+     * Carrega os critérios salvos do localStorage
+     */
+    carregarCriterios() {
+        try {
+            const config = localStorage.getItem('criterios_analise');
+            if (config) {
+                const criterios = JSON.parse(config);
+                this.configurar(criterios);
+                console.log('[AnalisadorCorrida] Critérios carregados:', criterios);
+            }
+        } catch (e) {
+            console.error('[AnalisadorCorrida] Erro ao carregar critérios:', e);
+        }
+    }
 }
 
 // Instância global
 const analisador = new AnalisadorCorrida();
+
+// Carrega critérios salvos na inicialização
+analisador.carregarCriterios();
