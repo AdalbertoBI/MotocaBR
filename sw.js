@@ -1,27 +1,26 @@
-const CACHE_NAME = 'motoca-br-v3.2';
-const DATA_BACKUP_CACHE = 'data-backup-v3.2';
+const CACHE_NAME = 'motoca-br-v3.3';
+const DATA_BACKUP_CACHE = 'data-backup-v3.3';
 const FILES_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/assets/css/style.css',
-    '/assets/css/analise-style.css',
-    '/assets/js/mapa.js',
-    '/assets/js/script.js',
-    '/assets/js/frete.js',
-    '/assets/js/financeiro.js',
-    '/assets/js/analise-corrida.js',
-    '/assets/js/analise-ui.js',
-    '/assets/js/install-prompt.js',
-    '/assets/js/update-checker.js',
-    '/assets/js/apk-installer.js',
-    '/assets/libs/bubbly-bg.min.js',
-    '/manifest.json',
-    '/img/icon-192x192.png',
-    '/.well-known/assetlinks.json'
+    './',
+    './index.html',
+    './assets/css/style.css',
+    './assets/css/analise-style.css',
+    './assets/js/mapa.js',
+    './assets/js/script.js',
+    './assets/js/frete.js',
+    './assets/js/financeiro.js',
+    './assets/js/analise-corrida.js',
+    './assets/js/analise-ui.js',
+    './assets/js/install-prompt.js',
+    './assets/js/update-checker.js',
+    './assets/js/apk-installer.js',
+    './assets/libs/bubbly-bg.min.js',
+    './manifest.json',
+    './img/icon-192x192.png'
 ];
 
 self.addEventListener('install', (event) => {
-    console.log('[Service Worker] Instalando versão 3.2');
+    console.log('[Service Worker] Instalando versão 3.3');
     event.waitUntil(
         Promise.all([
             caches.open(CACHE_NAME)
@@ -40,7 +39,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-    console.log('[Service Worker] Ativando versão 3.2');
+    console.log('[Service Worker] Ativando versão 3.3');
     event.waitUntil(
         Promise.all([
             caches.keys().then((cacheNames) => {

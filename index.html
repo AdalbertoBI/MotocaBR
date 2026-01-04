@@ -423,13 +423,28 @@
     <script src="assets/js/script.js?v=3.2"></script>
     <script src="assets/js/frete.js?v=3.2"></script>
     <script src="assets/js/financeiro.js?v=3.2"></script>
-    <script src="assets/js/analise-corrida.js?v=1.1"></script>
+    <script src="assets/js/analise-corrida.js?v=1.2"></script>
     <script src="assets/js/analise-ui.js?v=1.0"></script>
     <script src="assets/js/install-prompt.js?v=1.0"></script>
-    <script src="assets/js/update-checker.js?v=1.0"></script>
-    <script src="assets/js/apk-installer.js?v=1.0"></script>
+    <script src="assets/js/update-checker.js?v=1.1"></script>
+    <script src="assets/js/apk-installer.js?v=1.1"></script>
     <script src="assets/libs/bubbly-bg.min.js"></script>
-    <script>bubbly();</script>
+    <script>
+        // Inicializa bubbly background se disponível
+        if (typeof bubbly === 'function') {
+            try {
+                bubbly({
+                    colorStart: "#667eea",
+                    colorStop: "#764ba2",
+                    blur: 1,
+                    compose: "source-over",
+                    bubbleFunc: () => `hsla(${Math.random() * 360}, 100%, 50%, .3)`
+                });
+            } catch (e) {
+                console.warn('Bubbly background não disponível:', e);
+            }
+        }
+    </script>
     <script>
     function openTab(evt, tabName) {
         const tabcontent = document.getElementsByClassName('tabcontent');

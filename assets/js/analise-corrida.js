@@ -410,6 +410,63 @@ class AnalisadorCorrida {
             };
         }
     }
+
+    /**
+     * Obtém o histórico completo de análises
+     * @returns {Array} Array de análises do histórico
+     */
+    obterHistorico() {
+        try {
+            const historico = localStorage.getItem('historico_analises');
+            if (!historico) {
+                return [];
+            }
+            
+            const dados = JSON.parse(historico);
+            
+            // Retorna array de análises, ordenadas por data (mais recente primeiro)
+            if (Array.isArray(dados)) {
+                return dados.sort((a, b) => {
+                    const dataA = new Date(a.timestamp || a.data);
+                    const dataB = new Date(b.timestamp || b.data);
+                    return dataB - dataA;
+                });
+            }
+            
+            return [];
+        } catch (e) {
+            console.error('[AnalisadorCorrida] Erro ao obter histórico:', e);
+            return [];
+        }
+    }
+
+    /**
+     * Limpa o histórico de análises
+     */
+    limparHistorico() {
+        try {
+            localStorage.removeItem('historico_analises');
+            console.log('[AnalisadorCorrida] Histórico limpo com sucesso');
+            return true;
+        } catch (e) {
+            console.error('[AnalisadorCorrida] Erro ao limpar histórico:', e);
+            return false;
+        }
+    }
+
+    /**
+     * Exporta o histórico como JSON
+     * @returns {string} JSON string do histórico
+     */
+    exportarHistorico() {
+        try {
+            const historico = this.obterHistorico();
+            return JSON.stringify(historico, null, 2);
+        } catch (e) {
+            console.error('[AnalisadorCorrida] Erro ao exportar histórico:', e);
+            return '[]';
+        }
+    }
 }
 
 // Instância global

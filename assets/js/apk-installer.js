@@ -85,7 +85,19 @@ class APKInstallManager {
                 headers: { 'Accept': 'application/vnd.github.v3+json' }
             });
             
-            if (!response.ok) throw new Error('Release não encontrada');
+            // Se não houver releases (404), retorna info padrão
+            if (response.status === 404) {
+                console.log('[APK Installer] Nenhuma release com APK disponível ainda');
+                return {
+                    version: '3.2',
+                    name: 'Motoca BR',
+                    downloadUrl: this.FALLBACK_URL,
+                    size: '~2 MB',
+                    publishedAt: new Date().toLocaleDateString('pt-BR')
+                };
+            }
+            
+            if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
             
             const data = await response.json();
             
@@ -105,7 +117,7 @@ class APKInstallManager {
         } catch (error) {
             console.warn('Erro ao buscar release info:', error);
             return {
-                version: 'latest',
+                version: '3.2',
                 name: 'Motoca BR',
                 downloadUrl: this.FALLBACK_URL,
                 size: '~2 MB',

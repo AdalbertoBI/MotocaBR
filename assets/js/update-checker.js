@@ -4,7 +4,7 @@
 (function() {
     'use strict';
 
-    const APP_VERSION = '3.1'; // Atualizar manualmente a cada release
+    const APP_VERSION = '3.2'; // Atualizar manualmente a cada release
     const GITHUB_API = 'https://api.github.com/repos/AdalbertoBI/MotocaBR/releases/latest';
     const CHECK_INTERVAL = 24 * 60 * 60 * 1000; // Verificar a cada 24h
 
@@ -32,8 +32,16 @@
             console.log('[UpdateChecker] Verificando atualizações...');
             
             const response = await fetch(GITHUB_API);
+            
+            // Se não houver releases ainda (404), não é erro crítico
+            if (response.status === 404) {
+                console.log('[UpdateChecker] Nenhuma release disponível ainda');
+                setLastCheckTime();
+                return;
+            }
+            
             if (!response.ok) {
-                throw new Error('Erro ao buscar releases');
+                throw new Error(`Erro HTTP: ${response.status}`);
             }
 
             const release = await response.json();
@@ -48,7 +56,9 @@
                 console.log('[UpdateChecker] App está atualizado (v' + APP_VERSION + ')');
             }
         } catch (error) {
-            console.error('[UpdateChecker] Erro ao verificar atualizações:', error);
+            console.warn('[UpdateChecker] Não foi possível verificar atualizações:', error.message);
+            // Atualiza timestamp mesmo com erro para não ficar tentando repetidamente
+            setLastCheckTime();
         }
     }
 
