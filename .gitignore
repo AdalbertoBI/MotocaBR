@@ -1,4 +1,5 @@
 # Arquivos sensíveis - NUNCA commitar!
+Credentials/
 signing.keystore
 signing-key-info.txt
 *.keystore
