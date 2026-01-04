@@ -41,7 +41,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#007bff">
     <meta name="description" content="Motoca BR - Otimize rotas, calcule fretes e gerencie finanças para motoboys.">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -55,16 +55,17 @@
     <link rel="stylesheet" href="assets/css/analise-style.css?v=1.0">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="img/icon-192x192.png" type="image/png">
+    <link rel="apple-touch-icon" href="img/icon-192x192.png">
 </head>
 <body>
     <div class="container">
-        <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema"><span class="sr-only">Alternar tema</span>☀️</button>
+        <button type="button" id="themeToggle" class="theme-toggle" aria-label="Alternar tema"><span class="sr-only">Alternar tema</span>☀️</button>
         <h1>Motoca BR</h1>
-        <div class="tabs">
-            <button class="tablink" onclick="openTab(event, 'Analise')" aria-selected="false">🚦 Análise</button>
-            <button class="tablink active" onclick="openTab(event, 'Rotas')" aria-selected="true">Rotas</button>
-            <button class="tablink" onclick="openTab(event, 'Frete')" aria-selected="false">Frete</button>
-            <button class="tablink" onclick="openTab(event, 'Financeiro')" aria-selected="false">Financeiro</button>
+        <div class="tabs" role="tablist">
+            <button type="button" class="tablink" role="tab" onclick="openTab(event, 'Analise')" aria-selected="false">🚦 Análise</button>
+            <button type="button" class="tablink active" role="tab" onclick="openTab(event, 'Rotas')" aria-selected="true">Rotas</button>
+            <button type="button" class="tablink" role="tab" onclick="openTab(event, 'Frete')" aria-selected="false">Frete</button>
+            <button type="button" class="tablink" role="tab" onclick="openTab(event, 'Financeiro')" aria-selected="false">Financeiro</button>
         </div>
 
         <!-- Aba Análise de Corrida -->
@@ -306,10 +307,10 @@
             <div id="resultadoRota" class="mt-3"></div>
             <div class="mt-3 text-muted text-center">
                 Junte-se à nossa comunidade no WhatsApp! 
-                <a href="https://chat.whatsapp.com/IbsOuFuyRweCEzLMooCyVD" target="_blank" class="text-primary" aria-label="Entrar na comunidade do WhatsApp">Clique aqui</a>
+                <a href="https://chat.whatsapp.com/IbsOuFuyRweCEzLMooCyVD" target="_blank" rel="noopener noreferrer" class="text-primary" aria-label="Entrar na comunidade do WhatsApp">Clique aqui</a>
                 <br>
                 Siga-nos no Instagram! 
-                <a href="https://www.instagram.com/betomotoquinha/" target="_blank" class="text-primary" aria-label="Seguir no Instagram">Clique aqui</a>
+                <a href="https://www.instagram.com/betomotoquinha/" target="_blank" rel="noopener noreferrer" class="text-primary" aria-label="Seguir no Instagram">Clique aqui</a>
             </div>
         </div>
 
@@ -340,10 +341,10 @@
             <p id="resultadoFrete" class="mt-2">Valor do Frete: R$ 0.00</p>
             <div class="mt-3 text-muted text-center">
                 Junte-se à nossa comunidade no WhatsApp! 
-                <a href="https://chat.whatsapp.com/IbsOuFuyRweCEzLMooCyVD" target="_blank" class="text-primary" aria-label="Entrar na comunidade do WhatsApp">Clique aqui</a>
+                <a href="https://chat.whatsapp.com/IbsOuFuyRweCEzLMooCyVD" target="_blank" rel="noopener noreferrer" class="text-primary" aria-label="Entrar na comunidade do WhatsApp">Clique aqui</a>
                 <br>
                 Siga-nos no Instagram! 
-                <a href="https://www.instagram.com/betomotoquinha/" target="_blank" class="text-primary" aria-label="Seguir no Instagram">Clique aqui</a>
+                <a href="https://www.instagram.com/betomotoquinha/" target="_blank" rel="noopener noreferrer" class="text-primary" aria-label="Seguir no Instagram">Clique aqui</a>
             </div>
         </div>
 
@@ -403,10 +404,10 @@
 
             <div class="mt-3 text-muted text-center">
                 Junte-se à nossa comunidade no WhatsApp! 
-                <a href="https://chat.whatsapp.com/IbsOuFuyRweCEzLMooCyVD" target="_blank" class="text-primary" aria-label="Entrar na comunidade do WhatsApp">Clique aqui</a>
+                <a href="https://chat.whatsapp.com/IbsOuFuyRweCEzLMooCyVD" target="_blank" rel="noopener noreferrer" class="text-primary" aria-label="Entrar na comunidade do WhatsApp">Clique aqui</a>
                 <br>
                 Siga-nos no Instagram! 
-                <a href="https://www.instagram.com/betomotoquinha/" target="_blank" class="text-primary" aria-label="Seguir no Instagram">Clique aqui</a>
+                <a href="https://www.instagram.com/betomotoquinha/" target="_blank" rel="noopener noreferrer" class="text-primary" aria-label="Seguir no Instagram">Clique aqui</a>
             </div>
         </div>
 
