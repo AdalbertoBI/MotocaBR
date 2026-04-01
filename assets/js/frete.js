@@ -17,7 +17,7 @@ function calcularFrete() {
 
     if (!kmInput || !pesoInput || !custoPorKmInput || !custoPorKgInput || !resultadoFrete) {
         console.error('[frete.js] Elementos do DOM ausentes.');
-        alert('Erro interno: Elementos da página ausentes.');
+        showToast('Erro interno: Elementos da página ausentes.', 'error');
         return;
     }
 
@@ -27,22 +27,22 @@ function calcularFrete() {
     const custoPorKg = parseFloat(custoPorKgInput.value) || 0;
 
     if (isNaN(km) || km < 0) {
-        alert('Digite uma distância válida (km)!');
+        showToast('Digite uma distância válida (km)!', 'warning');
         kmInput.focus();
         return;
     }
     if (isNaN(peso) || peso < 0) {
-        alert('Digite um peso válido (kg)!');
+        showToast('Digite um peso válido (kg)!', 'warning');
         pesoInput.focus();
         return;
     }
     if (isNaN(custoPorKm) || custoPorKm < 0) {
-        alert('Digite um custo por km válido!');
+        showToast('Digite um custo por km válido!', 'warning');
         custoPorKmInput.focus();
         return;
     }
     if (isNaN(custoPorKg) || custoPorKg < 0) {
-        alert('Digite um custo por kg válido!');
+        showToast('Digite um custo por kg válido!', 'warning');
         custoPorKgInput.focus();
         return;
     }

@@ -88,10 +88,10 @@
     // Botão Analisar
     btnAnalisarAgora.addEventListener('click', analisarCorrida);
 
-    function analisarCorrida() {
+    async function analisarCorrida() {
         // Validar app selecionado
         if (!appSelecionado) {
-            alert('Por favor, selecione um aplicativo primeiro!');
+            showToast('Por favor, selecione um aplicativo primeiro!', 'warning');
             return;
         }
 
@@ -105,25 +105,25 @@
         const tempo = parseInt(tempoStr);
 
         if (isNaN(valor) || valor <= 0) {
-            alert('Digite um valor válido para a corrida!');
+            showToast('Digite um valor válido para a corrida!', 'warning');
             quickValor.focus();
             return;
         }
 
         if (isNaN(distancia) || distancia <= 0) {
-            alert('Digite uma distância válida!');
+            showToast('Digite uma distância válida!', 'warning');
             quickDistancia.focus();
             return;
         }
 
         if (isNaN(tempo) || tempo <= 0) {
-            alert('Digite um tempo válido!');
+            showToast('Digite um tempo válido!', 'warning');
             quickTempo.focus();
             return;
         }
 
         // Realizar análise
-        const resultado = analisador.analisarCorrida({
+        const resultado = await analisador.analisar({
             app: appSelecionado,
             valorCorrida: valor,
             distanciaTotal: distancia,
@@ -212,34 +212,32 @@
     });
 
     // Botões de Decisão
-    btnAcceptCorrida.addEventListener('click', function() {
+    btnAcceptCorrida.addEventListener('click', async function() {
         if (ultimaAnalise) {
             // Registrar decisão
             ultimaAnalise.decisao = 'aceita';
-            analisador.salvarHistorico(ultimaAnalise);
+            await analisador.salvarHistorico(ultimaAnalise);
             
             // Vibrar feedback positivo
             analisador.vibrar('sucesso');
             
-            // Mensagem de confirmação
-            alert('✅ Corrida aceita e registrada no histórico!');
+            showToast('Corrida aceita e registrada no histórico!', 'success');
             
             // Nova análise
             btnNovaAnalise.click();
         }
     });
 
-    btnRejectCorrida.addEventListener('click', function() {
+    btnRejectCorrida.addEventListener('click', async function() {
         if (ultimaAnalise) {
             // Registrar decisão
             ultimaAnalise.decisao = 'recusada';
-            analisador.salvarHistorico(ultimaAnalise);
+            await analisador.salvarHistorico(ultimaAnalise);
             
             // Vibrar feedback negativo
             analisador.vibrar('erro');
             
-            // Mensagem de confirmação
-            alert('❌ Corrida recusada e registrada no histórico!');
+            showToast('Corrida recusada e registrada no histórico.', 'info');
             
             // Nova análise
             btnNovaAnalise.click();
@@ -247,9 +245,9 @@
     });
 
     // Atualizar Estatísticas do Dia
-    function atualizarEstatisticas() {
+    async function atualizarEstatisticas() {
         const hoje = new Date().toISOString().split('T')[0];
-        const stats = analisador.obterEstatisticasPorData(hoje);
+        const stats = await analisador.obterEstatisticasPorData(hoje);
         
         document.getElementById('statTotal').textContent = stats.total;
         document.getElementById('statAceitas').textContent = stats.aceitas;
@@ -260,8 +258,8 @@
     }
 
     // Atualizar Histórico Rápido
-    function atualizarHistorico() {
-        const historico = analisador.obterHistorico();
+    async function atualizarHistorico() {
+        const historico = await analisador.obterHistorico();
         const listaHistorico = document.getElementById('listaHistoricoRapido');
         
         if (historico.length === 0) {
@@ -304,8 +302,8 @@
     }
 
     // Modal de Configuração
-    btnConfigCriterios.addEventListener('click', function() {
-        const config = analisador.obterConfiguracao();
+    btnConfigCriterios.addEventListener('click', async function() {
+        const config = await analisador.obterConfiguracao();
         
         document.getElementById('configMinKm').value = config.lucroMinimoPorKm;
         document.getElementById('configMinHora').value = config.lucroMinimoPorHora;
@@ -318,16 +316,16 @@
         modalCriterios.style.display = 'none';
     });
 
-    btnSalvarCriterios.addEventListener('click', function() {
+    btnSalvarCriterios.addEventListener('click', async function() {
         const novaConfig = {
             lucroMinimoPorKm: parseFloat(document.getElementById('configMinKm').value),
             lucroMinimoPorHora: parseFloat(document.getElementById('configMinHora').value),
             lucroMinimoPorMinuto: parseFloat(document.getElementById('configMinMin').value)
         };
         
-        analisador.configurar(novaConfig);
+        await analisador.configurar(novaConfig);
         
-        alert('✅ Configuração salva com sucesso!');
+        showToast('Configuração salva com sucesso!', 'success');
         modalCriterios.style.display = 'none';
     });
 
@@ -339,10 +337,10 @@
     });
 
     // Inicialização
-    function init() {
+    async function init() {
         // Atualizar estatísticas ao carregar
-        atualizarEstatisticas();
-        atualizarHistorico();
+        await atualizarEstatisticas();
+        await atualizarHistorico();
         
         // Pré-selecionar iFood (app mais comum)
         if (appButtons.length > 0) {

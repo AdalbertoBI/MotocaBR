@@ -4,7 +4,8 @@
 (function() {
     'use strict';
 
-    const APP_VERSION = '3.2'; // Atualizar manualmente a cada release
+    // Versão lida do arquivo centralizado version.js (window.MOTOCA_VERSION.app)
+    const APP_VERSION = (window.MOTOCA_VERSION && window.MOTOCA_VERSION.app) || '3.4';
     const GITHUB_API = 'https://api.github.com/repos/AdalbertoBI/MotocaBR/releases/latest';
     const CHECK_INTERVAL = 24 * 60 * 60 * 1000; // Verificar a cada 24h
 

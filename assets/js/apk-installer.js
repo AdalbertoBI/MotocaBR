@@ -89,7 +89,7 @@ class APKInstallManager {
             if (response.status === 404) {
                 console.log('[APK Installer] Nenhuma release com APK disponível ainda');
                 return {
-                    version: '3.2',
+                    version: (window.MOTOCA_VERSION && window.MOTOCA_VERSION.app) || '3.4',
                     name: 'Motoca BR',
                     downloadUrl: this.FALLBACK_URL,
                     size: '~2 MB',
@@ -117,7 +117,7 @@ class APKInstallManager {
         } catch (error) {
             console.warn('Erro ao buscar release info:', error);
             return {
-                version: '3.2',
+                version: (window.MOTOCA_VERSION && window.MOTOCA_VERSION.app) || '3.4',
                 name: 'Motoca BR',
                 downloadUrl: this.FALLBACK_URL,
                 size: '~2 MB',

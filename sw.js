@@ -1,10 +1,19 @@
-const CACHE_NAME = 'motoca-br-v3.3';
-const DATA_BACKUP_CACHE = 'data-backup-v3.3';
+// ─── versão centralizada ─────────────────────────────────────────────────────
+// version.js define APP_VERSION e CACHE_VERSION como variáveis globais no
+// contexto do SW. Assim não precisamos duplicar a string aqui.
+importScripts('./assets/js/version.js');
+
+const CACHE_NAME        = 'motoca-br-' + CACHE_VERSION;
+const DATA_BACKUP_CACHE = 'data-backup-' + CACHE_VERSION;
 const FILES_TO_CACHE = [
+    './assets/js/version.js',
     './',
     './index.html',
     './assets/css/style.css',
     './assets/css/analise-style.css',
+    './assets/js/db.js',
+    './assets/js/toast.js',
+    './assets/js/swipe-tabs.js',
     './assets/js/mapa.js',
     './assets/js/script.js',
     './assets/js/frete.js',
@@ -20,7 +29,7 @@ const FILES_TO_CACHE = [
 ];
 
 self.addEventListener('install', (event) => {
-    console.log('[Service Worker] Instalando versão 3.3');
+    console.log('[Service Worker] Instalando versão 3.4');
     event.waitUntil(
         Promise.all([
             caches.open(CACHE_NAME)

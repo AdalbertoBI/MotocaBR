@@ -4,25 +4,19 @@ let localizacaoAtual = null;
 let cidadeAtual = 'São José dos Campos';
 let paradasCount = 1;
 let timeoutBusca = null;
-let cacheBusca = {};
 let rotaCoordenadas = [];
 const COORDENADAS_PADRAO = { endereco: 'Parque Industrial, São José dos Campos, São Paulo', lat: -23.2582, lon: -45.8875 };
-const MAX_CACHE_ENTRIES = 200; // Reduzido de 1000 para 200
-const MAX_CACHE_SIZE = 3 * 1024 * 1024; // 3 MB limite para cacheBusca
 
-// Função para calcular o tamanho do cache em bytes
-function calcularTamanhoCache(data) {
-    try {
-        return new Blob([JSON.stringify(data)]).size;
-    } catch (e) {
-        console.warn('[script.js] Erro ao calcular tamanho do cache:', e);
-        return 0;
-    }
-}
+// Cache em memória — espelhado no IndexedDB pelo MotocaDB
+let cacheBusca = {};
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('[script.js] DOM carregado. Iniciando aplicação...');
-    const savedTheme = localStorage.getItem('theme') || 'light';
+
+    // Inicializa o banco de dados (migra localStorage → IndexedDB se necessário)
+    await MotocaDB.init();
+
+    const savedTheme = (await MotocaDB.getConfig('theme')) || 'light';
     document.body.classList.add(savedTheme + '-mode');
     document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
     
@@ -41,7 +35,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     configurarListeners();
     obterLocalizacaoAtual();
-    limparCacheAntigo();
+    // Pré-carrega cache de busca do IndexedDB para memória (não-bloqueante)
+    _carregarCacheEmMemoria();
     console.log('[script.js] Inicialização concluída.');
 });
 
@@ -91,7 +86,7 @@ function configurarListeners() {
             document.body.classList.remove('dark-mode', 'light-mode');
             document.body.classList.add(isDarkMode ? 'dark-mode' : 'light-mode');
             themeToggle.textContent = isDarkMode ? '🌙' : '☀️';
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            MotocaDB.setConfig('theme', isDarkMode ? 'dark' : 'light');
             atualizarTilesMapa(isDarkMode);
             console.log('[script.js] Tema alternado para:', isDarkMode ? 'escuro' : 'claro');
         });
@@ -158,7 +153,7 @@ function obterLocalizacaoAtual() {
         (error) => {
             console.error('[script.js] Erro na geolocalização:', error.message);
             if (carregandoDiv) carregandoDiv.style.display = 'none';
-            alert(`Não foi possível obter sua localização: ${error.message}. Usando localização padrão.`);
+            showToast(`Não foi possível obter sua localização: ${error.message}. Usando localização padrão.`, 'warning');
             usarLocalizacaoPadrao();
         },
         { timeout: 15000, enableHighAccuracy: true, maximumAge: 60000 }
@@ -276,8 +271,16 @@ async function buscarSugestoes(inputId, datalistId) {
     }
 
     const cacheKey = `sug_${entrada.toLowerCase()}_${cidadeAtual.toLowerCase()}`;
+    // 1) Tenta cache em memória
     if (cacheBusca[cacheKey]) {
         preencherDatalist(datalistId, cacheBusca[cacheKey]);
+        return;
+    }
+    // 2) Tenta cache persistente no IndexedDB
+    const cachedIdb = await MotocaDB.getCacheItem(cacheKey);
+    if (cachedIdb) {
+        cacheBusca[cacheKey] = cachedIdb;
+        preencherDatalist(datalistId, cachedIdb);
         return;
     }
 
@@ -299,7 +302,7 @@ async function buscarSugestoes(inputId, datalistId) {
             category: item.category
         }));
         cacheBusca[cacheKey] = sugestoes;
-        salvarCache();
+        MotocaDB.setCacheItem(cacheKey, sugestoes); // persiste no IndexedDB (não-bloqueante)
         preencherDatalist(datalistId, sugestoes);
     } catch (error) {
         console.error('[script.js] Erro ao buscar sugestões:', error);
@@ -345,9 +348,17 @@ async function geocodificar(endereco) {
         throw new Error('Endereço vazio após limpeza.');
     }
     const cacheKey = `geo_${enderecoLimpo.toLowerCase()}`;
+    // 1) Tenta cache em memória
     if (cacheBusca[cacheKey]) {
-        console.log('[script.js] Usando cache para:', enderecoLimpo);
+        console.log('[script.js] Usando cache (memória) para:', enderecoLimpo);
         return cacheBusca[cacheKey];
+    }
+    // 2) Tenta cache no IndexedDB
+    const cachedIdb = await MotocaDB.getCacheItem(cacheKey);
+    if (cachedIdb) {
+        cacheBusca[cacheKey] = cachedIdb;
+        console.log('[script.js] Usando cache (IndexedDB) para:', enderecoLimpo);
+        return cachedIdb;
     }
 
     try {
@@ -362,7 +373,7 @@ async function geocodificar(endereco) {
         if (isNaN(lat) || isNaN(lon)) throw new Error(`Coordenadas inválidas para "${enderecoLimpo}"`);
         const coordenadas = [lat, lon];
         cacheBusca[cacheKey] = coordenadas;
-        salvarCache();
+        MotocaDB.setCacheItem(cacheKey, coordenadas);
         return coordenadas;
     } catch (error) {
         console.error(`[script.js] Erro na geocodificação de "${enderecoLimpo}":`, error);
@@ -370,46 +381,16 @@ async function geocodificar(endereco) {
     }
 }
 
-function limparCacheAntigo() {
-    let entries = Object.keys(cacheBusca);
-    let cacheSize = calcularTamanhoCache(cacheBusca);
-    
-    // Remover entradas se exceder o número máximo ou o tamanho máximo
-    while (entries.length > MAX_CACHE_ENTRIES || cacheSize > MAX_CACHE_SIZE) {
-        const toRemove = entries.slice(0, Math.max(1, entries.length - MAX_CACHE_ENTRIES));
-        toRemove.forEach(key => delete cacheBusca[key]);
-        entries = Object.keys(cacheBusca);
-        cacheSize = calcularTamanhoCache(cacheBusca);
-        console.log('[script.js] Cache limpo, removidas', toRemove.length, 'entradas. Tamanho atual:', cacheSize / (1024 * 1024), 'MB');
-    }
-    salvarCache();
-}
-
-function salvarCache() {
-    try {
-        const cacheSize = calcularTamanhoCache(cacheBusca);
-        if (cacheSize > MAX_CACHE_SIZE) {
-            console.warn('[script.js] Cache excede o limite de tamanho:', cacheSize / (1024 * 1024), 'MB');
-            limparCacheAntigo();
-        }
-        if (cacheSize > 0) {
-            localStorage.setItem('cacheBusca', JSON.stringify(cacheBusca));
-            console.log('[script.js] Cache salvo, tamanho:', cacheSize / (1024 * 1024), 'MB');
-        }
-    } catch (e) {
-        console.warn('[script.js] Não foi possível salvar cache:', e);
-        if (e.name === 'QuotaExceededError') {
-            cacheBusca = {};
-            localStorage.removeItem('cacheBusca');
-            console.log('[script.js] Cache resetado devido a QuotaExceededError.');
-        }
-    }
+async function _carregarCacheEmMemoria() {
+    // Carrega lazily: o cache de memória será populado sob demanda via getCacheItem.
+    // Esta função existe para extensão futura (ex: pré-aquecer entradas frequentes).
+    console.log('[script.js] Cache IndexedDB pronto (carregamento lazy ativo).');
 }
 
 async function calcularRota() {
     console.log('[script.js] Iniciando cálculo de rota...');
     if (!mapaPronto || !map) {
-        alert('O mapa não está pronto. Tente recarregar a página.');
+        showToast('O mapa não está pronto. Tente recarregar a página.', 'error');
         return;
     }
 
@@ -419,7 +400,7 @@ async function calcularRota() {
 
     if (!origemInput || !destinoInput || !resultadoRotaDiv) {
         console.error('[script.js] Elementos do DOM ausentes!');
-        alert('Erro interno: Elementos da página ausentes. Recarregue.');
+        showToast('Erro interno: Elementos da página ausentes. Recarregue.', 'error');
         return;
     }
 
@@ -430,7 +411,7 @@ async function calcularRota() {
         .filter(val => val);
 
     if (!origem || !destino) {
-        alert('Preencha os campos de Origem e Destino!');
+        showToast('Preencha os campos de Origem e Destino!', 'warning');
         return;
     }
 
@@ -476,7 +457,7 @@ async function calcularRota() {
         }
 
         if (falhasGeocodificacao.length > 0) {
-            alert(`Atenção: Ignorando pontos não encontrados:\n- ${falhasGeocodificacao.join('\n- ')}`);
+            showToast(`Atenção: Ignorando pontos não encontrados:\n- ${falhasGeocodificacao.join('\n- ')}`, 'warning');
         }
 
         if (coordsParaApi.length < 2) {
@@ -511,7 +492,7 @@ async function calcularRota() {
 
         const data = await response.json();
         console.log('[script.js] Dados GraphHopper:', data);
-        processarRespostaRota(data, coordsParaApi);
+        await processarRespostaRota(data, coordsParaApi);
     } catch (error) {
         console.error('[script.js] Erro no cálculo da rota:', error);
         resultadoRotaDiv.innerHTML = `<div class="error"><b>Erro ao calcular a rota:</b><br>${error.message}.<br>Verifique os endereços e conexão.</div>`;
@@ -519,7 +500,7 @@ async function calcularRota() {
     }
 }
 
-function processarRespostaRota(data, coordsUtilizadas) {
+async function processarRespostaRota(data, coordsUtilizadas) {
     if (data.paths && data.paths.length > 0) {
         const path = data.paths[0];
         if (typeof path.distance !== 'number') {
@@ -541,8 +522,8 @@ function processarRespostaRota(data, coordsUtilizadas) {
         adicionarMarcadores(coordsOrigem, coordsParadas, coordsDestino);
         if (geometry) desenharRota(geometry);
 
-        const kmPorLitro = parseFloat(localStorage.getItem('kmPorLitro')) || 0;
-        const precoPorLitro = parseFloat(localStorage.getItem('precoPorLitro')) || 0;
+        const kmPorLitro = await MotocaDB.getConfigFloat('kmPorLitro', 0);
+        const precoPorLitro = await MotocaDB.getConfigFloat('precoPorLitro', 0);
         let infoCombustivelHTML = '<p class="text-muted"><small>Configure Km/Litro e Preço/Litro na aba "Financeiro".</small></p>';
         if (kmPorLitro > 0) {
             const litros = distancia / kmPorLitro;
@@ -591,7 +572,7 @@ function formatarTempo(totalSegundos) {
 
 function iniciarRota() {
     if (!rotaCoordenadas || rotaCoordenadas.length < 2) {
-        alert('Nenhuma rota calculada. Por favor, calcule uma rota primeiro.');
+        showToast('Nenhuma rota calculada. Por favor, calcule uma rota primeiro.', 'warning');
         return;
     }
 

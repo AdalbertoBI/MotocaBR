@@ -1,0 +1,19 @@
+PRIORIDADE ALTA (segurança + dados)
+├── 🔴 Mover API key para backend proxy
+├── 🔴 Implementar backend mínimo (Express/Hono + SQLite)
+ok - ├── 🔴 Migrar dados para IndexedDB
+ok -└── 🔴 Corrigir <!DOCTYPE html> no início do arquivo
+
+PRIORIDADE MÉDIA (qualidade + UX)
+├── 🟡 Adicionar Vite como bundler
+├── 🟡 Substituir alert() por toasts
+├── 🟡 Implementar swipe entre abas
+├── 🟡 Adicionar gráficos de ganhos (Chart.js)
+├── 🟡 Tornar taxas de plataforma configuráveis
+└── 🟡 Unificar versão em um único arquivo de constantes
+
+PRIORIDADE BAIXA (modernização progressiva)
+├── 🔵 Workbox para SW inteligente
+├── 🔵 TypeScript gradual via JSDoc
+├── 🔵 Vitest para testes das regras de negócio
+└── 🔵 Gráfico de calor de horários mais rentáveis
